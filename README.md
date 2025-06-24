@@ -132,7 +132,7 @@ ros2 --help
 
 ```bash
 # Navigate to your desired location (adjust path as needed)
-cd ~/Documents/GitHub/
+cd ~/Documents/Github/
 
 # Create workspace structure
 mkdir -p ros2_ws/src
@@ -271,7 +271,7 @@ crwxrwxrwx 1 root dialout 188, 1 Jun 24 12:53 /dev/ttyUSB1
 
 ```bash
 # Navigate to workspace root
-cd ~/Documents/GitHub/school/ros2_ws
+cd ~/Documents/Github/school/ros2_ws
 
 # Install dependencies using rosdep
 sudo rosdep init  # Only if never run before
@@ -309,7 +309,7 @@ pip3 install pyserial numpy
 
 ```bash
 # Navigate to workspace root
-cd ~/Documents/GitHub/school/ros2_ws
+cd ~/Documents/Github/school/ros2_ws
 
 # Build the workspace
 colcon build
@@ -325,7 +325,7 @@ colcon build --parallel-workers 1
 source install/setup.bash
 
 # Add to bashrc for permanent effect
-echo "source ~/Documents/GitHub/school/ros2_ws/install/setup.bash" >> ~/.bashrc
+echo "source ~/Documents/Github/school/ros2_ws/install/setup.bash" >> ~/.bashrc
 ```
 
 ### 3. Verify Build
@@ -363,7 +363,7 @@ You can override default settings when launching. See [Running the Hardware Laun
 
 ```bash
 # Make sure workspace is sourced
-source ~/Documents/GitHub/school/ros2_ws/install/setup.bash
+source ~/Documents/Github/school/ros2_ws/install/setup.bash
 
 # Launch with default settings
 ros2 launch jolie_localization hardware.launch.py
@@ -373,15 +373,15 @@ ros2 launch jolie_localization hardware.launch.py
 
 ```bash
 # Launch with custom LIDAR port
-ros2 launch jolie_localization hardware.launch.py lidar_serial_port:=/dev/ttyUSB0
+ros2 launch jolie_localization hardware.launch.py lidar_serial_port:=/dev/rplidar
 
-# Launch with custom IMU port  
-ros2 launch jolie_localization hardware.launch.py imu_port:=/dev/ttyUSB1
+# Launch with custom IMU port
+ros2 launch jolie_localization hardware.launch.py imu_port:=/dev/imu_usb
 
 # Launch with multiple parameters
 ros2 launch jolie_localization hardware.launch.py \
-    lidar_serial_port:=/dev/ttyUSB0 \
-    imu_port:=/dev/ttyUSB1 \
+    lidar_serial_port:=/dev/rplidar \
+    imu_port:=/dev/imu_usb \
     lidar_baudrate:=230400
 
 # Launch only LIDAR (disable IMU)
@@ -389,6 +389,9 @@ ros2 launch jolie_localization hardware.launch.py use_imu:=false
 
 # Launch only IMU (disable LIDAR)
 ros2 launch jolie_localization hardware.launch.py use_lidar:=false
+
+# Launch with all sensors enabled
+ros2 launch jolie_localization hardware.launch.py use_lidar:=true use_imu:=true
 ```
 
 ### 3. Available Launch Arguments
@@ -397,7 +400,7 @@ ros2 launch jolie_localization hardware.launch.py use_lidar:=false
 |-----------|---------------|-------------|
 | `use_lidar` | `true` | Enable/disable LIDAR |
 | `use_imu` | `true` | Enable/disable IMU |
-| `lidar_serial_port` | `/dev/ttyUSB0` | LIDAR serial port |
+| `lidar_serial_port` | `/dev/rplidar` | LIDAR serial port |
 | `lidar_baudrate` | `460800` | LIDAR communication baudrate |
 | `lidar_frame_id` | `laser` | LIDAR frame ID |
 | `lidar_inverted` | `false` | Invert LIDAR scan data |
