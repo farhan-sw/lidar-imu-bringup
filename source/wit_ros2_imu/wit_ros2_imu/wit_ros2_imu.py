@@ -26,20 +26,25 @@ def get_quaternion_from_euler(roll, pitch, yaw):
     return [qx, qy, qz, qw]
 
 class IMUDriverNode(Node):
-    def __init__(self, port_name):
+    def __init__(self):
         super().__init__('imu_driver_node')
 
-        # Frame ID untuk header pesan
-        self.frame_id = 'imu_link'
+        # Declare parameters with default values
+        self.declare_parameter('port', '/dev/imu_usb')
+        self.declare_parameter('baud', 9600)
+        self.declare_parameter('frame_id', 'imu_link')
+
+        # Get parameter values
+        self.port_name = self.get_parameter('port').get_parameter_value().string_value
+        self.baud_rate = self.get_parameter('baud').get_parameter_value().integer_value
+        self.frame_id = self.get_parameter('frame_id').get_parameter_value().string_value
+
+        self.get_logger().info(f'IMU Node started with port: {self.port_name}, baudrate: {self.baud_rate}')
 
         # Publisher IMU dan Magnetometer
         qos = QoSProfile(depth=10)
         self.imu_pub = self.create_publisher(Imu, 'imu/data_raw', qos)
         self.mag_pub = self.create_publisher(MagneticField, 'imu/mag', qos)
-
-        # Serial port
-        self.port_name = port_name
-        self.baud_rate = 9600
 
         # Buffer dan state untuk parsing data serial
         self.buff = {}
@@ -205,8 +210,7 @@ class IMUDriverNode(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    port = '/dev/ttyUSB1'  # Ganti sesuai port Anda
-    imu_node = IMUDriverNode(port)
+    imu_node = IMUDriverNode()
     try:
         rclpy.spin(imu_node)
     except KeyboardInterrupt:
